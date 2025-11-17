@@ -16,6 +16,8 @@ var rho = 1.225 # Air density (kg/m^3)
 var mu = 0.00001802 # Air Dynamic Viscosity
 var nu = 0.00001470 # Air Kinematic Viscosity
 var nu_g = 0.0012 # Grass Viscosity (estimate somewhere between air and water)
+var drag_cf := 1.2 # Drag correction factor
+var lift_cf := 1.2 # lift correction factor
 
 var state : Enums.BallState = Enums.BallState.REST
 
@@ -69,23 +71,10 @@ func _physics_process(delta: float) -> void:
 			
 		var Re : float = rho*speed*radius*2.0/mu
 		
-		# Magnus and drag coefficients
-		var Cl = Coefficients.get_Cl(Re, spin)*1.25
-		var Cd = Coefficients.get_Cd(Re)*1.25
-		
-		#Cl = 0.05
-		#if spin > 0.05:
-			#Cl = -3.25*spin*spin + 1.99*spin
-		#if spin > 0.32:
-			#Cl = 0.3
-			
-		#Cd = 0.52
-		#if Re > 0.5e5:
-			#Cd = 1.29e-10*Re*Re - 2.59e-5*Re + 1.5
-		#if Re > 0.85e5:
-			#Cd = 1.91e-11*Re*Re - 5.4e-6*Re + 0.56
-		#if Re > 1.75e5:
-			#Cd = 0.2
+		# Magnus, drag, and coefficients
+		var Cl = Coefficients.get_Cl(Re, spin)*lift_cf
+		var Cd = Coefficients.get_Cd(Re)*drag_cf
+		var Cm = 6.0*PI*nu*radius
 		
 		# Magnus force
 		var om_x_vel = omega.cross(velocity)
@@ -93,7 +82,7 @@ func _physics_process(delta: float) -> void:
 		if omega_len > 0.1:
 			F_m = 0.5*Cl*rho*A*om_x_vel*velocity.length()/omega.length()
 		# Viscous Torque
-		T_d = -6.0*PI*nu*radius*omega
+		T_d = -Cm*omega
 		# Drag force
 		F_d = -0.5*Cd*rho*A*velocity*speed
 		
