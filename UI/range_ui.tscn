@@ -1,12 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://da1vsfwmbk8vw"]
+[gd_scene load_steps=9 format=3 uid="uid://da1vsfwmbk8vw"]
 
 [ext_resource type="Script" uid="uid://dginc6hghigy3" path="res://UI/range_ui.gd" id="1_kur1t"]
 [ext_resource type="PackedScene" uid="uid://bxqjwaed60ykh" path="res://UI/data_panel.tscn" id="1_q72xt"]
+[ext_resource type="PackedScene" uid="uid://cr5js3cuw3b7y" path="res://UI/Settings/RangeSettings/range_settings.tscn" id="3_bxj45"]
 [ext_resource type="PackedScene" uid="uid://xwb2lctkdfv5" path="res://UI/ClubSelector/club_selector.tscn" id="3_crlyb"]
+[ext_resource type="Texture2D" uid="uid://d02uis8ujb4ml" path="res://Utils/Settings/Gear.png" id="3_omvf4"]
 [ext_resource type="PackedScene" uid="uid://bixsmx2mhvyyx" path="res://UI/SessionPopUp/session_pop_up.tscn" id="4_7kh1v"]
 [ext_resource type="Script" uid="uid://3iepiwkqvgs7" path="res://UI/grid_canvas.gd" id="5_rfb4h"]
 [ext_resource type="Script" uid="uid://cgdpaxem0op8k" path="res://UI/shot_injector.gd" id="6_j5yvw"]
-[ext_resource type="Script" uid="uid://8ug625530jav" path="res://UI/environment_settings.gd" id="7_ax8lh"]
 
 [node name="RangeUI" type="MarginContainer"]
 anchors_preset = 15
@@ -31,14 +32,14 @@ layout_mode = 2
 
 [node name="PlayerName" type="Label" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 1
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 32
 text = "Player1"
 vertical_alignment = 1
 
 [node name="RecButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 0
 tooltip_text = "Start Recording Range Session"
 text = "REC: Off"
 
@@ -46,10 +47,14 @@ text = "REC: Off"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ExitButton" type="Button" parent="HBoxContainer"]
+[node name="RangeSettings" parent="HBoxContainer" instance=ExtResource("3_bxj45")]
+visible = false
+z_index = 1
 layout_mode = 2
-size_flags_vertical = 4
-text = "Exit to Menu"
+
+[node name="SettingsButton" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("3_omvf4")
 
 [node name="SessionPopUp" parent="." instance=ExtResource("4_7kh1v")]
 layout_mode = 2
@@ -162,39 +167,9 @@ placeholder_text = "0.0"
 layout_mode = 2
 text = "Hit Shot"
 
-[node name="EnvironmentSettings" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-script = ExtResource("7_ax8lh")
-
-[node name="Altitude" type="Label" parent="EnvironmentSettings"]
-layout_mode = 2
-text = "Altitude"
-
-[node name="AltitudeText" type="TextEdit" parent="EnvironmentSettings"]
-custom_minimum_size = Vector2(0, 35)
-layout_mode = 2
-text = "0.0"
-placeholder_text = "0.0"
-
-[node name="Temperature" type="Label" parent="EnvironmentSettings"]
-layout_mode = 2
-text = "Temperature"
-
-[node name="TemperatureText" type="TextEdit" parent="EnvironmentSettings"]
-custom_minimum_size = Vector2(0, 35)
-layout_mode = 2
-text = "75.0"
-placeholder_text = "75.0"
-
-[node name="Button" type="Button" parent="EnvironmentSettings"]
-layout_mode = 2
-text = "Set"
-
 [connection signal="club_selected" from="HBoxContainer/ClubSelector" to="." method="_on_club_selector_club_selected"]
 [connection signal="pressed" from="HBoxContainer/RecButton" to="." method="_on_rec_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/SettingsButton" to="HBoxContainer/RangeSettings" method="_on_settings_button_pressed"]
 [connection signal="dir_selected" from="SessionPopUp" to="." method="_on_session_pop_up_dir_selected"]
 [connection signal="drag_ended" from="GridCanvas/Distance" to="GridCanvas" method="_on_panel_drag_ended"]
 [connection signal="drag_started" from="GridCanvas/Distance" to="GridCanvas" method="_on_panel_drag_started"]
@@ -210,5 +185,3 @@ text = "Set"
 [connection signal="drag_started" from="GridCanvas/HLA" to="GridCanvas" method="_on_panel_drag_started"]
 [connection signal="inject" from="ShotInjector" to="." method="_on_shot_injector_inject"]
 [connection signal="pressed" from="ShotInjector/Button" to="ShotInjector" method="_on_button_pressed"]
-[connection signal="inject_env" from="EnvironmentSettings" to="." method="_on_environment_settings_inject_env"]
-[connection signal="pressed" from="EnvironmentSettings/Button" to="EnvironmentSettings" method="_on_button_pressed"]
