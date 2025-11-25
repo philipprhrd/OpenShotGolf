@@ -7,7 +7,7 @@ Open Shot Golf is an open source golf simulator built using the Godot Engine. Th
 You can find their github page here: https://github.com/jamespilgrim/PiTrac  
 ### Current State
 Launch Monitor Support:  
-- At this point, the golf sim only supports connections to a PiTrac launch monitor.
+- At this point, the golf sim only **OFFICIALLY** supports connections to a PiTrac launch monitor. However it should technically support any GSPro interface with the port set to the correct value.
   
 Sim Features:  
 - The golf sim features a range mode with data readouts, club selection, and range session recording. There are a few more range features being planned at the momemnt but feel free to open an issue with any suggestions or areas of improvement.
